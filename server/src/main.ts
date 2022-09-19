@@ -19,6 +19,8 @@ async function bootstrap() {
     credentials: true,
     origin: JSON.parse(CLIENT_URLS),
   });
+  // run the app
   await app.listen(PORT);
 }
+// call the start function
 bootstrap();

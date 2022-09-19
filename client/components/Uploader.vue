@@ -13,7 +13,7 @@
 				</TransitionChild>
 
 				<div class="fixed inset-0 overflow-y-auto">
-					<div class="flex min-h-full items-center justify-center p-4">
+					<div class="flex items-center justify-center min-h-full p-4">
 						<TransitionChild
 							as="template"
 							enter="duration-300 ease-out"
@@ -22,22 +22,22 @@
 							leave-to="opacity-0 scale-95"
 						>
 							<DialogPanel
-								class="w-full max-w-lg transform overflow-hidden rounded-2xl bg-white p-6 shadow-xl transition-all"
+								class="w-full max-w-lg p-6 overflow-hidden transition-all transform bg-white shadow-xl dark:text-gray-100 dark:bg-slate-900 rounded-2xl"
 							>
 								<DialogTitle as="h3" class="text-lg font-medium text-center">
 									Upload Files
 								</DialogTitle>
 								<div class="mt-8">
-									<div class="border border-dashed border-primary-300 rounded-lg text-center py-9">
+									<div class="text-center border border-dashed rounded-lg border-primary-300 py-9">
 										<div v-bind="getRootProps()">
 											<input v-bind="getInputProps()" />
 											<p v-if="isDragActive">Drop the files here ...</p>
-											<p class="font-light text-sm" v-else>
+											<p class="text-sm font-light" v-else>
 												Drag & drop some files here, or click to select files
 											</p>
 										</div>
 										<button
-											class="px-5 py-3 rounded-lg text-sm bg-gray-100 mt-5 font-light"
+											class="px-5 py-3 mt-5 text-sm font-light bg-gray-100 rounded-lg btn-flat"
 											@click="open"
 										>
 											Browse Files
@@ -48,15 +48,15 @@
 								<div class="mt-4">
 									<transition name="fade">
 										<div v-if="selectedFiles.length" class="flex items-center justify-between">
-											<h3 class="text-sm text-gray-400 font-light">Selected files</h3>
-											<button class="btn text-xs px-3">Start Upload</button>
+											<h3 class="text-sm font-light text-gray-400">Selected files</h3>
+											<button @click="uploadFiles" class="px-3 text-xs btn">Start Upload</button>
 										</div>
 									</transition>
-									<transition-group name="list" tag="ul" class="mt-5 space-y-3 relative">
+									<transition-group name="list" tag="ul" class="relative mt-5 space-y-3">
 										<template :key="`selectedFile${i}`" v-for="(f, i) in selectedFiles">
-											<li class="p-3 shadow shadow-gray-500/20 rounded-md origin-center">
+											<li class="p-3 origin-center rounded-md shadow shadow-gray-500/20">
 												<div class="flex items-center justify-between">
-													<div class="max-w-sm flex items-start space-x-4">
+													<div class="flex items-start max-w-sm space-x-4">
 														<img
 															:src="`${getVSIFileIcon(f.name)}`"
 															alt="js"
@@ -65,10 +65,10 @@
 															class="object-contain"
 														/>
 														<div>
-															<h1 class="truncate text-sm mb-1">
+															<h1 class="mb-1 text-sm truncate">
 																{{ f.name }}
 															</h1>
-															<p class="text-xs uppercase text-gray-400 font-light">
+															<p class="text-xs font-light text-gray-400 uppercase">
 																{{ f.type.split("/").pop() }}
 															</p>
 														</div>
@@ -76,7 +76,7 @@
 
 													<button
 														@click="selectedFiles.splice(i, 1)"
-														class="p-2 flex bg-gray-100 rounded-full shrink-0"
+														class="flex p-2 bg-gray-100 rounded-full dark:bg-slate-800 shrink-0"
 													>
 														<Icon name="bi:x" />
 													</button>
@@ -105,20 +105,34 @@
 		DialogTitle,
 	} from "@headlessui/vue";
 
+	// handles the drop files
 	function onDrop(acceptFiles, rejectReasons) {
 		acceptFiles.forEach((f) => selectedFiles.value.push(f));
 	}
-
+	// stores the files that will be uploaded
 	const selectedFiles = ref([]);
+
+	// bring in method used to create documents
+	const { createDocument } = useDocument();
 
 	const { getRootProps, getInputProps, open, isDragActive, ...rest } = useDropzone({ onDrop });
 	const isOpen = ref(false);
 	function closeModal() {
+		selectedFiles.value = [];
 		isOpen.value = false;
 	}
 	function openModal() {
 		isOpen.value = true;
 	}
+
+	// method triggered when the start upload button is clicked
+	const uploadFiles = async () => {
+		if (selectedFiles.value.length == 0) return;
+		useLoader().value = true;
+		await createDocument(selectedFiles.value);
+		useLoader().value = false;
+		closeModal();
+	};
 
 	defineExpose({
 		closeModal,

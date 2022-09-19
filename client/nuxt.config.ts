@@ -3,13 +3,9 @@ export default defineNuxtConfig({
 	build: {
 		transpile: ["@headlessui/vue"],
 	},
-	modules: ["@nuxtjs/tailwindcss", "@nuxtjs/google-fonts", "nuxt-icon"],
+	modules: ["@nuxtjs/tailwindcss", "@nuxtjs/google-fonts", "nuxt-icon", "@vueuse/nuxt"],
 	tailwindcss: {
 		cssPath: "~/assets/main.css",
-	},
-	// Color mode config
-	colorMode: {
-		classSuffix: "",
 	},
 	// Google config
 	googleFonts: {

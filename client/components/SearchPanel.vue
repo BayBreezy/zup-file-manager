@@ -22,16 +22,16 @@
 							leave-to="opacity-0 scale-95"
 						>
 							<DialogPanel
-								class="w-full max-w-lg overflow-hidden transition-all transform bg-white shadow-xl rounded-xl"
+								class="w-full max-w-lg overflow-hidden transition-all transform bg-white shadow-xl dark:bg-slate-900 dark:text-gray-200 rounded-xl"
 							>
-								<div class="flex items-center w-full px-3 space-x-2 border-b">
+								<div class="flex items-center w-full px-3 space-x-2 border-b dark:border-slate-700">
 									<Icon class="text-gray-400" name="ep:search" size="20" />
 									<input
 										v-model.trim="search"
 										type="search"
 										name="search"
 										id="sarch"
-										class="w-full py-4 outline-none"
+										class="w-full py-4 outline-none dark:bg-transparent"
 										placeholder="Search for file here"
 									/>
 								</div>
@@ -42,6 +42,7 @@
 										<template v-for="d in docs" :key="d.id">
 											<li>
 												<button
+													@click="$refs.fileDetails.openModal(d)"
 													class="flex items-center w-full p-3 space-x-5 transition-all duration-300 rounded-md outline-none focus:ring-4 focus:ring-primary/30 group"
 												>
 													<img
@@ -70,6 +71,8 @@
 				</div>
 			</Dialog>
 		</TransitionRoot>
+		<!-- File details action -->
+		<FileDetails ref="fileDetails" />
 	</div>
 </template>
 
@@ -79,24 +82,31 @@
 	import { IDocument } from "~~/types";
 	import fileSize from "file-size";
 
+	// bring in method used to seach for docs
 	const { searchDocument } = useDocument();
+	// var used to store the list of results from search
 	const docs = ref<IDocument[]>([]);
 
+	// var used to hold search term
 	const search = ref("");
 
 	const isOpen = ref(false);
 	function closeModal() {
+		search.value = "";
+		docs.value = [];
 		isOpen.value = false;
 	}
 	function openModal() {
 		isOpen.value = true;
 	}
 
+	// function that is triggered when the search value updates
 	const findDocs = async () => {
 		if (!search.value) return;
 		docs.value = await searchDocument(search.value);
 	};
 
+	// watcher that triggers the search function
 	watch(search, (val, oldVal) => {
 		if (val !== oldVal) {
 			setTimeout(() => {

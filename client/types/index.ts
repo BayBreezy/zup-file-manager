@@ -1,3 +1,4 @@
+// interface matching the mongodb schema
 export interface IDocument {
 	id: string;
 	createdAt: string;

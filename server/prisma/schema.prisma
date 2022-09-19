@@ -16,7 +16,7 @@ model Document {
   updatedAt DateTime @updatedAt
 
   uid          String? @default(uuid())
-  name         String?
+  name         String
   description  String?
   originalname String
   mimetype     String

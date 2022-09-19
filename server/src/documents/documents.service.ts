@@ -12,6 +12,7 @@ import { unlink } from 'fs';
 export class DocumentsService {
   constructor(private readonly prisma: PrismaService) {}
 
+  // create an array of documents
   async create(files?: Array<Express.Multer.File>) {
     try {
       return await this.prisma.document.createMany({
@@ -31,6 +32,7 @@ export class DocumentsService {
     }
   }
 
+  // find all documents
   async findAll() {
     try {
       return await this.prisma.document.findMany();
@@ -39,13 +41,18 @@ export class DocumentsService {
     }
   }
 
+  // search for a document by a term
   async search(term: string) {
     return await this.prisma.document.findMany({
+      // take only 10 that match the term
+      take: 10,
+      // filter with OR operator
       where: {
         OR: [
           {
             originalname: {
               contains: term,
+              // needed for mongodb
               mode: 'insensitive',
             },
           },
@@ -55,11 +62,18 @@ export class DocumentsService {
               mode: 'insensitive',
             },
           },
+          {
+            name: {
+              contains: term,
+              mode: 'insensitive',
+            },
+          },
         ],
       },
     });
   }
 
+  // update a file by id
   async update(id: string, dto: CreateDocumentDto, file?: Express.Multer.File) {
     try {
       // find the document
@@ -91,6 +105,7 @@ export class DocumentsService {
     }
   }
 
+  // delete a single doc
   async remove(id: string) {
     try {
       // Find the document and delet it from the server

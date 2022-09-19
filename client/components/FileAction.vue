@@ -13,13 +13,13 @@
 
 			<transition name="menu">
 				<MenuItems
-					class="absolute right-0 p-2 mt-2 space-y-2 origin-top-right bg-white divide-y rounded-lg shadow w-52"
+					class="absolute right-0 p-2 mt-2 space-y-2 origin-top-right bg-white divide-y rounded-lg shadow dark:divide-gray-600 dark:bg-slate-700 w-52"
 				>
 					<div class="space-y-1">
 						<MenuItem v-slot="{ active }">
 							<button
 								@click="$refs.editFile.openModal(document)"
-								:class="[active ? 'bg-primary text-white' : 'text-gray-500']"
+								:class="[active ? 'bg-primary text-white' : 'text-gray-500 dark:text-gray-300']"
 								class="w-full flex justify-start items-center space-x-3 text-sm p-2.5 rounded-md transition-all"
 								type="button"
 							>
@@ -30,7 +30,7 @@
 						<MenuItem v-slot="{ active }">
 							<button
 								@click="$refs.fileDetails.openModal(document)"
-								:class="[active ? 'bg-primary text-white' : 'text-gray-500']"
+								:class="[active ? 'bg-primary text-white' : 'text-gray-500 dark:text-gray-300']"
 								class="w-full flex justify-start items-center space-x-3 text-sm p-2.5 rounded-md transition-all"
 								type="button"
 							>
@@ -43,7 +43,7 @@
 						<MenuItem v-slot="{ active }">
 							<button
 								@click="deleteDoc()"
-								:class="[active ? 'bg-red-50 text-red-500' : 'text-gray-500']"
+								:class="[active ? 'bg-red-50 text-red-500' : 'text-gray-500 dark:text-gray-300']"
 								class="w-full flex justify-start items-center space-x-3 text-sm p-2.5 rounded-md transition-all"
 								type="button"
 							>
@@ -65,6 +65,8 @@
 
 <script setup>
 	import { Menu, MenuButton, MenuItems, MenuItem } from "@headlessui/vue";
+
+	// declare props
 	const props = defineProps({
 		document: {
 			required: true,
@@ -72,8 +74,11 @@
 		},
 	});
 
+	// bring in function used to removedoc
 	const { removeDocument } = useDocument();
 	const deleteDoc = async () => {
+		let c = confirm("Are you sure?");
+		if (!c) return;
 		await removeDocument(props.document.id);
 	};
 </script>

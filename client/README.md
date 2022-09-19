@@ -1,8 +1,18 @@
-# Nuxt 3 Minimal Starter
+# Zup File Manager
+
+An application built with Nuxt 3 & NestJS + MongoDB
+
+## Nuxt 3 Docs
 
 Look at the [nuxt 3 documentation](https://v3.nuxtjs.org) to learn more.
 
 ## Setup
+
+Create `.env` and add API_URL variable
+
+```env
+API_URL = "https://api.example.com/"
+```
 
 Make sure to install the dependencies:
 
@@ -25,18 +35,8 @@ Start the development server on http://localhost:3000
 npm run dev
 ```
 
-## Production
+## Me?
 
-Build the application for production:
+[Behon Baker](https://behonbaker.com/)
 
-```bash
-npm run build
-```
-
-Locally preview production build:
-
-```bash
-npm run preview
-```
-
-Checkout the [deployment documentation](https://v3.nuxtjs.org/guide/deploy/presets) for more information.
+![Behon Baker](https://behonbaker.com/icon.png)

@@ -26,6 +26,7 @@ export class DocumentsController {
   @Post()
   @UseInterceptors(
     FilesInterceptor('file', null, {
+      // configure file location storage
       storage: diskStorage({
         destination: './uploads',
         filename(req, file, callback) {
@@ -54,6 +55,7 @@ export class DocumentsController {
   @Patch(':id')
   @UseInterceptors(
     FileInterceptor('file', {
+      // configure file storage location
       storage: diskStorage({
         destination: './uploads',
         filename(req, file, callback) {

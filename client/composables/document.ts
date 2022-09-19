@@ -2,6 +2,7 @@ import { IDocument } from "~~/types";
 
 export const useAllDocuments = () => useState<IDocument[]>("alDocuments", () => []);
 
+// returns the url to the api
 export const useApiUrl = () => {
 	const config = useRuntimeConfig();
 	return config.public.API_URL;
@@ -28,7 +29,10 @@ export const useDocument = () => {
 		return data;
 	};
 
-	// Method used ot create document(s)
+	/**
+	 *
+	 *  Method used ot create document(s)
+	 * */
 	const createDocument = async (files) => {
 		// create form data
 		let fd = new FormData();
@@ -55,7 +59,10 @@ export const useDocument = () => {
 		await getAllDocuments();
 	};
 
-	// Method used to update a document
+	/**
+	 *
+	 * Method used to update a document
+	 */
 	const updateDocument = async (id: string, body, file) => {
 		// create form data
 		let fd = new FormData();

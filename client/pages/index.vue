@@ -5,11 +5,12 @@
 		>
 			<div class="flex items-center justify-between h-16 max-w-6xl px-5 mx-auto lg:px-0">
 				<NuxtLink class="text-2xl font-semibold" to="/">Zup</NuxtLink>
-				<div class="flex space-x-5">
-					<button @click="$refs.searchPanel.openModal()" type="button" class="btn-flat">
+				<div class="flex items-center space-x-5">
+					<button @click="$refs.searchPanel.openModal()" type="button" class="px-3 py-2 btn-flat">
 						<span>Search</span>
 					</button>
 					<button @click="$refs.uploader.openModal()" class="px-3 py-2 btn">Upload File</button>
+					<Theme />
 				</div>
 			</div>
 		</header>
@@ -21,15 +22,18 @@
 		<SearchPanel ref="searchPanel" />
 
 		<main class="min-h-screen py-10">
-			<div
+			<transition-group
+				tag="div"
+				name="list"
+				mode="out-in"
 				class="grid max-w-6xl grid-cols-1 gap-5 p-5 mx-auto md:gap-10 lg:p-0 md:grid-cols-3 lg:grid-cols-4"
 			>
 				<template v-for="d in documents" :key="d.id">
 					<div
-						class="relative px-5 py-10 text-center transition-all rounded-2xl group bg-slate-50 hover:bg-primary-50"
+						class="relative px-5 py-10 text-center transition-all rounded-2xl group dark:bg-slate-800/50 bg-slate-50 dark:hover:bg-slate-700/20 hover:bg-primary-50"
 					>
 						<!-- Format -->
-						<div class="inline-block h-20 px-5 bg-white rounded-md shadow">
+						<div class="inline-block h-20 px-5 bg-white rounded-md shadow dark:bg-slate-700">
 							<div class="flex items-center justify-center w-full h-full">
 								<img
 									:src="`${getVSIFileIcon(d.filename)}`"
@@ -57,7 +61,7 @@
 						</p>
 					</div>
 				</template>
-			</div>
+			</transition-group>
 		</main>
 	</div>
 </template>
@@ -66,9 +70,10 @@
 	import { getVSIFileIcon } from "file-extension-icon-js";
 	import fileSize from "file-size";
 
+	// bring in function to get all documents
 	const { getAllDocuments } = useDocument();
+	// call documents on server side
 	await useAsyncData(async () => await getAllDocuments(), { initialCache: false });
+	// store documents in local variable
 	const documents = useAllDocuments();
 </script>
-
-<style></style>
